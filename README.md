@@ -1,26 +1,63 @@
 # 🧭 KubeToOps — Navigate Kubernetes. Operate with confidence.
 
-[![Validation](https://github.com/KubeToOps/KubeToOps/actions/workflows/validate.yml/badge.svg)](https://github.com/KubeToOps/KubeToOps/actions/workflows/validate.yml)
-[![Command Catalog](https://github.com/KubeToOps/KubeToOps/actions/workflows/validate-commands.yml/badge.svg)](https://github.com/KubeToOps/KubeToOps/actions/workflows/validate-commands.yml)
-[![Security Scan](https://github.com/KubeToOps/KubeToOps/actions/workflows/security.yml/badge.svg)](https://github.com/KubeToOps/KubeToOps/actions/workflows/security.yml)
+[![Validation](https://github.com/flesrusselle/KubeToOps/actions/workflows/validate.yml/badge.svg)](https://github.com/flesrusselle/KubeToOps/actions/workflows/validate.yml)
+[![Command Catalog](https://github.com/flesrusselle/KubeToOps/actions/workflows/validate-commands.yml/badge.svg)](https://github.com/flesrusselle/KubeToOps/actions/workflows/validate-commands.yml)
+[![Security Scan](https://github.com/flesrusselle/KubeToOps/actions/workflows/security.yml/badge.svg)](https://github.com/flesrusselle/KubeToOps/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Cost: $0](https://img.shields.io/badge/Cost-%240_Hosting-brightgreen.svg)](docs/COST.md)
 
-> A practical, high-velocity Kubernetes field guide for DevOps engineers, SREs, platform engineers, and cloud developers.
+> A practical, high-velocity Kubernetes field guide and operational toolbox for DevOps engineers, SREs, platform engineers, and cloud developers.
 
-**KubeToOps** is NOT a beginner Kubernetes tutorial. It is a practical engineering toolbox for professionals who already understand basic Kubernetes concepts (`kubectl get pods`, pods vs services, basic YAML) and want to:
+**KubeToOps** is NOT a beginner Kubernetes tutorial. It is a practical engineering field guide for professionals who already understand basic Kubernetes concepts (`kubectl get pods`, pods vs services, basic YAML) and want to operate faster, safer, and with higher confidence.
 
-- ⚡ **Work faster** using vetted productivity flags and aliases
-- 🔍 **Troubleshoot effectively** with structured diagnostic decision trees
-- 🛠️ **Discover powerful tools** like K9s, kubectx/kubens, Krew, Stern, and Popeye
-- 🛡️ **Operate safely** with production safeguards and context guardrails
-- 📜 **Master YAML workflow** using dry-run generation and schema introspection (`kubectl explain`)
+---
+
+## ⚡ 5-Minute Onboarding: What To Do & How To Do It
+
+Select your current goal to jump straight into action:
+
+```
+                  ┌──────────────────────────────────────────┐
+                  │          WHAT IS YOUR CURRENT GOAL?       │
+                  └────────────────────┬─────────────────────┘
+                                       │
+         ┌─────────────────────────────┼─────────────────────────────┐
+         ▼                             ▼                             ▼
+┌──────────────────┐         ┌──────────────────┐         ┌──────────────────┐
+│  ACTIVE INCIDENT │         │ SHELL SPEEDUP    │         │ PROD SAFEGUARDS  │
+│  Fix broken pod  │         │ Aliases & K9s    │         │ Avoid outage     │
+└────────┬─────────┘         └────────┬─────────┘         └────────┬─────────┘
+         │                            │                            │
+         ▼                            ▼                            ▼
+┌──────────────────┐         ┌──────────────────┐         ┌──────────────────┐
+│ Quick Reference  │         │ Set up Aliases   │         │ Context Guard    │
+│ & Playbooks      │         │ & Install K9s    │         │ & Kube-PS1       │
+└──────────────────┘         └──────────────────┘         └──────────────────┘
+```
+
+### 🚨 Scenario 1: "I am in the middle of an active incident!"
+1. Open the **[Quick Reference Guide](docs/quick-reference.md)** ("I Need This Now").
+2. Follow our diagnostic playbooks:
+   - **CrashLoopBackOff**: [`docs/troubleshooting/crashloopbackoff.md`](docs/troubleshooting/crashloopbackoff.md)
+   - **ImagePullBackOff**: [`docs/troubleshooting/imagepullbackoff.md`](docs/troubleshooting/imagepullbackoff.md)
+   - **Pending Pod**: [`docs/troubleshooting/pending.md`](docs/troubleshooting/pending.md)
+   - **OOMKilled**: [`docs/troubleshooting/oomkilled.md`](docs/troubleshooting/oomkilled.md)
+   - **Service Unreachable**: [`docs/troubleshooting/service-unreachable.md`](docs/troubleshooting/service-unreachable.md)
+
+### ⚡ Scenario 2: "I want to work 10x faster in terminal!"
+1. Add our curated **[Shell Aliases](docs/aliases/README.md)** to your `~/.zshrc` or `~/.bashrc`.
+2. Enable **[Shell Completion](docs/aliases/shell-completion.md)** for `kubectl`, `kubectx`, and `kubens`.
+3. Install **[K9s Terminal UI](docs/tools/k9s.md)** (`brew install derailed/k9s/k9s`).
+
+### 🛡️ Scenario 3: "I want to prevent accidental production outages!"
+1. Read **[Don't Accidentally Break Production](docs/security/dont-accidentally-break-production.md)**.
+2. Setup **[Context Safeguards & Prompt Indicators](docs/contexts/production-safeguards.md)** (`kube-ps1`).
 
 ---
 
 ## ⚡ Command of the Day
 
-Stay sharp with our automated, deterministic Kubernetes command highlight!
+Stay sharp with our automated, deterministic daily Kubernetes command highlight!
 
 👉 **[View Today's Featured Command](command-of-the-day/README.md)**
 
@@ -31,25 +68,7 @@ kubectl get pods -n default -w
 
 ---
 
-## ⚡ "I Need This Now" — Fast Reference
-
-In the middle of an incident or deployment? Skip the guide and hit our fast-lookup index:
-
-👉 **[docs/quick-reference.md](docs/quick-reference.md)**
-
-| Urgent Scenario | Recommended Action / Guide | Safety |
-| :--- | :--- | :--- |
-| **Pod keeps restarting** | [CrashLoopBackOff Playbook](docs/troubleshooting/crashloopbackoff.md) | 🟢 Safe |
-| **Pod stuck pulling image** | [ImagePullBackOff Playbook](docs/troubleshooting/imagepullbackoff.md) | 🟢 Safe |
-| **Pod stuck in Pending state** | [Pending Pod Playbook](docs/troubleshooting/pending.md) | 🟢 Safe |
-| **Container killed by OOM** | [OOMKilled Playbook](docs/troubleshooting/oomkilled.md) | 🟢 Safe |
-| **Service returns connection refused**| [Service Unreachable Playbook](docs/troubleshooting/service-unreachable.md) | 🟢 Safe |
-| **Switch cluster context safely** | [Context Safeguards Guide](docs/contexts/production-safeguards.md) | 🟢 Safe |
-| **Restart deployment without downtime** | [Rollout Management Guide](docs/workloads/rollouts.md) | 🟡 Caution |
-
----
-
-## 🗺️ Field Guide Navigation
+## 🗺️ Complete Field Guide Navigation
 
 | Category | Description | Primary Reference |
 | :--- | :--- | :--- |
