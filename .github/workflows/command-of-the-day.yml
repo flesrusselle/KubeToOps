@@ -1,0 +1,73 @@
+name: Command of the Day Automation
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      command_id:
+        description: 'Optional Command ID to generate explicitly'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate-cotd:
+    name: Generate Command of the Day PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install pyyaml
+
+      - name: Run Generator Script
+        run: |
+          CMD_ID="${{ inputs.command_id }}"
+          if [ -n "$CMD_ID" ]; then
+            python3 scripts/generate_command_of_day.py --command-id "$CMD_ID"
+          else
+            python3 scripts/generate_command_of_day.py
+          fi
+
+      - name: Check for Changes
+        id: git_check
+        run: |
+          if git diff --quiet command-of-the-day/; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No updates detected for Command of the Day."
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in command-of-the-day/."
+          fi
+
+      - name: Create Pull Request
+        if: steps.git_check.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE_STR=$(date +%Y-%m-%d)
+          BRANCH_NAME="automation/command-of-the-day-${DATE_STR}"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git checkout -b "$BRANCH_NAME"
+          git add command-of-the-day/
+          git commit -m "docs: update Kubernetes Command of the Day (${DATE_STR})"
+          git push origin "$BRANCH_NAME" --force
+          
+          gh pr create \
+            --title "docs: update Kubernetes Command of the Day" \
+            --body "Automated daily Kubernetes Command of the Day update for ${DATE_STR}." \
+            --base main \
+            --head "$BRANCH_NAME"

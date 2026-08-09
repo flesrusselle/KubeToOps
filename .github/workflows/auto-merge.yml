@@ -1,0 +1,41 @@
+name: Controlled Auto-Merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronized, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge-cotd:
+    name: Auto-Merge CotD PRs
+    runs-on: ubuntu-latest
+    if: github.actor == 'github-actions[bot]' && startsWith(github.head_ref, 'automation/command-of-the-day-')
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Changed Files Safety
+        id: file_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+          SAFE=true
+          for f in $PR_FILES; do
+            if [[ "$f" != "command-of-the-day/README.md" && "$f" != "command-of-the-day/history.json" ]]; then
+              echo "UNSAFE FILE DETECTED IN COTD PR: $f"
+              SAFE=false
+            fi
+          done
+          echo "safe_files=$SAFE" >> $GITHUB_OUTPUT
+
+      - name: Enable Auto-Merge
+        if: steps.file_check.outputs.safe_files == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} --auto --squash
+          echo "Enabled auto-merge for safe CotD PR #${{ github.event.pull_request.number }}"

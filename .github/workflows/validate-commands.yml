@@ -1,0 +1,34 @@
+name: Command Catalog Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+      - 'scripts/**'
+  pull_request:
+    paths:
+      - 'content/**'
+      - 'scripts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-catalog:
+    name: Validate Catalog Schema & URLs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install pyyaml pytest
+
+      - name: Run Catalog Validator
+        run: python3 scripts/validate_commands.py content/commands.yaml content/tools.yaml
