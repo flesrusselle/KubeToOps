@@ -32,7 +32,7 @@ fi
 
 if command -v yamllint &>/dev/null; then
     echo -n "3. Running yamllint... "
-    if yamllint content/*.yaml .github/**/*.yml > /dev/null 2>&1; then
+    if yamllint -c .yamllint.yml content/ .github/**/*.yml > /dev/null 2>&1; then
         echo "✅ PASS"
     else
         echo "❌ FAIL"

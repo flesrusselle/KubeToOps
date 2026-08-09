@@ -3,6 +3,7 @@ name: Controlled Auto-Merge
 on:
   pull_request_target:
     types: [opened, synchronized, labeled]
+    branches: [main]
 
 permissions:
   contents: write
@@ -12,24 +13,39 @@ jobs:
   auto-merge-cotd:
     name: Auto-Merge CotD PRs
     runs-on: ubuntu-latest
-    if: github.actor == 'github-actions[bot]' && startsWith(github.head_ref, 'automation/command-of-the-day-')
+    # Only run for the bot's own CotD automation PRs
+    if: |
+      github.actor == 'github-actions[bot]' &&
+      startsWith(github.head_ref, 'automation/command-of-the-day-')
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Verify Changed Files Safety
+      - name: Verify Only Safe Files Changed
         id: file_check
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_FILES=$(gh pr diff "$PR_NUMBER" --name-only)
           SAFE=true
+          echo "Files changed in PR #${PR_NUMBER}:"
+          echo "$PR_FILES"
+
           for f in $PR_FILES; do
             if [[ "$f" != "command-of-the-day/README.md" && "$f" != "command-of-the-day/history.json" ]]; then
-              echo "UNSAFE FILE DETECTED IN COTD PR: $f"
+              echo "::error::UNSAFE FILE DETECTED IN COTD PR: $f"
               SAFE=false
             fi
           done
+
+          if [ "$SAFE" = "true" ]; then
+            echo "All changed files are safe generated content."
+          else
+            echo "::error::Unsafe files detected — auto-merge blocked."
+          fi
           echo "safe_files=$SAFE" >> $GITHUB_OUTPUT
 
       - name: Enable Auto-Merge
@@ -37,5 +53,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr merge ${{ github.event.pull_request.number }} --auto --squash
-          echo "Enabled auto-merge for safe CotD PR #${{ github.event.pull_request.number }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          gh pr merge "$PR_NUMBER" --auto --squash
+          echo "Auto-merge enabled for safe CotD PR #${PR_NUMBER}"
