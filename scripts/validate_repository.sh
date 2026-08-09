@@ -15,11 +15,18 @@ else
     FAILED=1
 fi
 
-echo -n "2. Running Python Unit Tests (pytest)... "
-if pytest tests/ > /dev/null 2>&1; then
-    echo "✅ PASS"
+echo -n "2. Running Python Unit Tests... "
+if command -v pytest &>/dev/null; then
+    if pytest tests/ > /dev/null 2>&1; then
+        echo "✅ PASS (pytest)"
+    else
+        echo "❌ FAIL (pytest)"
+        FAILED=1
+    fi
+elif python3 -m unittest discover -s tests > /dev/null 2>&1; then
+    echo "✅ PASS (unittest)"
 else
-    echo "❌ FAIL"
+    echo "❌ FAIL (unittest)"
     FAILED=1
 fi
 

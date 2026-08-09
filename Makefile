@@ -19,7 +19,7 @@ lint:
 	@pytest tests/
 
 test:
-	@pytest tests/
+	@if command -v pytest &>/dev/null; then pytest tests/; else python3 -m unittest discover -s tests; fi
 
 cotd:
 	@python3 scripts/generate_command_of_day.py
