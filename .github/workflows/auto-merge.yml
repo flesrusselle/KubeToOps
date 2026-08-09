@@ -15,7 +15,7 @@ jobs:
     if: github.actor == 'github-actions[bot]' && startsWith(github.head_ref, 'automation/command-of-the-day-')
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Verify Changed Files Safety
         id: file_check
