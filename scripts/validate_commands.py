@@ -6,7 +6,7 @@ Ensures content/commands.yaml and content/tools.yaml strictly comply with projec
 import os
 import sys
 import urllib.parse
-import yaml
+from yaml_loader import load_yaml
 
 VALID_CATEGORIES = {
     "kubectl", "productivity", "contexts", "namespaces", "aliases",
@@ -32,8 +32,7 @@ def validate_commands(commands_path: str) -> list:
         return [f"Commands catalog path '{commands_path}' does not exist."]
 
     try:
-        with open(commands_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+        data = load_yaml(commands_path)
     except Exception as e:
         return [f"YAML syntax error in {commands_path}: {e}"]
 
@@ -87,8 +86,7 @@ def validate_tools(tools_path: str) -> list:
         return [f"Tools catalog path '{tools_path}' does not exist."]
 
     try:
-        with open(tools_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+        data = load_yaml(tools_path)
     except Exception as e:
         return [f"YAML syntax error in {tools_path}: {e}"]
 

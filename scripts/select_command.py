@@ -8,14 +8,13 @@ import hashlib
 import json
 import os
 import sys
-import yaml
+from yaml_loader import load_yaml
 
 
 def load_commands(catalog_path: str) -> list:
     if not os.path.exists(catalog_path):
         raise FileNotFoundError(f"Command catalog not found at {catalog_path}")
-    with open(catalog_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+    data = load_yaml(catalog_path)
     if not isinstance(data, list) or len(data) == 0:
         raise ValueError("Command catalog must be a non-empty list.")
     return data
