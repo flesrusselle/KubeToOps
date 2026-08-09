@@ -1,89 +1,95 @@
-# 🚀 Getting Started with KubeToOps
+# 🚀 Getting Started with KubeToOps: Step-by-Step Guide
 
 Welcome to **KubeToOps** (*Navigate Kubernetes. Operate with confidence.*).
 
-This getting-started guide ensures your local workstation is equipped with the recommended tools, shell configurations, and environment checks before using our operational playbooks.
+This getting-started guide takes you step-by-step through setting up your environment, verifying your CLI tools, configuring shell completions, and executing your first diagnostic commands.
 
 ---
 
-## 1. Prerequisite Checklist
+## 📋 Step-by-Step Walkthrough: What To Do & How To Do It
 
-Before diving into KubeToOps workflows, check which host CLI tools are currently installed:
+### Step 1: Verify Host Tooling
+Run the built-in prerequisite checker to identify missing binaries:
 
 ```bash
-# Run the automated prerequisite checker script
+# Run automated prerequisite check
 make check-prerequisites
 ```
 
-### Essential Tools Hierarchy
-
-| Tool | Purpose | Priority | Installation (macOS) | Installation (Linux) |
-| :--- | :--- | :--- | :--- | :--- |
-| `kubectl` | Kubernetes primary CLI | **Required** | `brew install kubernetes-cli` | Official binary download |
-| `git` | Version control & repo sync | **Required** | Installed by default / `brew install git` | `sudo apt install git` |
-| `python3` | Automation & catalog verification | **Required** | `brew install python` | `sudo apt install python3` |
-| `kubectx` / `kubens` | Safe context/namespace switching | **Highly Recommended** | `brew install kubectx` | GitHub binary install |
-| `k9s` | Terminal UI for K8s navigation | **Highly Recommended** | `brew install derailed/k9s/k9s` | Webinstall script |
-| `krew` | kubectl plugin package manager | **Recommended** | Official install script | Official install script |
-| `shellcheck` | Shell script linter | **Optional (CI/Dev)** | `brew install shellcheck` | `sudo apt install shellcheck` |
-| `yamllint` | YAML format validator | **Optional (CI/Dev)** | `brew install yamllint` | `pip install yamllint` |
+#### Recommended Tooling Matrix
+| Binary | Recommended Action | macOS Command | Linux Command |
+| :--- | :--- | :--- | :--- |
+| `kubectl` | Primary K8s CLI | `brew install kubernetes-cli` | Official binary install |
+| `kubectx` / `kubens` | Context & namespace switching | `brew install kubectx` | GitHub script install |
+| `k9s` | Terminal UI dashboard | `brew install derailed/k9s/k9s` | Webinstall script |
+| `stern` | Multi-pod log tailer | `brew install stern` | GitHub release download |
 
 ---
 
-## 2. Shell Completion Setup
+### Step 2: Configure Terminal Shell Completion & Aliases
+Speed up your daily terminal workflow by enabling `kubectl` autocompletion and aliases:
 
-Enable shell completion so `kubectl`, `kubectx`, and `kubens` auto-complete resource names and flags.
-
-### Zsh (`~/.zshrc`)
+#### For Zsh Users (`~/.zshrc`):
 ```zsh
 # Enable kubectl autocompletion
 source <(kubectl completion zsh)
 
-# Setup alias for k and enable completion
-alias k=kubectl
+# Core aliases
+alias k='kubectl'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get svc'
+alias kgd='kubectl get deploy'
+alias kge='kubectl get events --sort-by=.lastTimestamp'
+alias klf='kubectl logs -f'
+
+# Enable completion for alias 'k'
 complete -o default -F __start_kubectl k
 ```
 
-### Bash (`~/.bashrc`)
+#### For Bash Users (`~/.bashrc`):
 ```bash
-# Enable kubectl autocompletion
 source <(kubectl completion bash)
-
-# Setup alias for k and enable completion
-alias k=kubectl
+alias k='kubectl'
 complete -o default -F __start_kubectl k
 ```
 
-👉 Detailed shell completion reference: [`docs/aliases/shell-completion.md`](../aliases/shell-completion.md)
+Reload shell configuration:
+```bash
+source ~/.zshrc  # or source ~/.bashrc
+```
 
 ---
 
-## 3. Verifying Your Local Environment
-
-Run the repository validation tool to confirm that all catalog commands and Python scripts pass validation:
+### Step 3: Verify Cluster Context Before Running Commands
+Before issuing state-changing commands, confirm which Kubernetes cluster context is currently active:
 
 ```bash
-# Run local unit tests and schema checks
-make test
-```
+# Check current active context
+kubectl config current-context
 
-Expected output:
-```
-============================== test session starts ==============================
-collected 4 items
-
-tests/test_command_catalog.py .                                         [ 25%]
-tests/test_cotd_selection.py .                                          [ 50%]
-tests/test_pr_summary.py .                                              [ 75%]
-tests/test_release_preview.py .                                         [100%]
-
-============================== 4 passed in 0.15s ===============================
+# Switch context if necessary
+kubectx dev-cluster
 ```
 
 ---
 
-## 4. Next Steps
+### Step 4: Run Your First Diagnostic Inspection
+Test your setup by retrieving pods and sorting recent cluster events:
 
-- Explore the **[Quick Reference](file:///Users/flestorres/Desktop/apply/KubeToOps/docs/quick-reference.md)** for immediate incident response commands.
-- Review **[kubectl Productivity](file:///Users/flestorres/Desktop/apply/KubeToOps/docs/kubectl/productivity.md)** for speed shortcuts.
-- Check **[Production Safeguards](file:///Users/flestorres/Desktop/apply/KubeToOps/docs/security/dont-accidentally-break-production.md)** to prevent dangerous production mistakes.
+```bash
+# Get pods in current namespace with wide formatting (Pod IP + Node)
+kubectl get pods -o wide
+
+# Sort events chronologically to catch recent warnings
+kubectl get events --sort-by=.lastTimestamp
+```
+
+---
+
+### Step 5: Explore Diagnostic Playbooks
+Bookmark our core troubleshooting guides:
+- 🩺 **[CrashLoopBackOff Playbook](../troubleshooting/crashloopbackoff.md)**
+- 🩺 **[ImagePullBackOff Playbook](../troubleshooting/imagepullbackoff.md)**
+- 🩺 **[Pending Pod Playbook](../troubleshooting/pending.md)**
+- 🩺 **[Service Unreachable Playbook](../troubleshooting/service-unreachable.md)**
+- 🛡️ **[Don't Accidentally Break Production](../security/dont-accidentally-break-production.md)**

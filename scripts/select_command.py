@@ -38,7 +38,15 @@ def select_command(catalog: list, history: list, date_str: str, target_id: str =
                 return cmd
         raise ValueError(f"Requested command ID '{target_id}' not found in catalog.")
 
-    # 2. Get recent command IDs from history (last 30 entries)
+    # 2. Check if date_str already has a selected command in history
+    for entry in history:
+        if isinstance(entry, dict) and entry.get("date") == date_str and entry.get("id"):
+            existing_id = entry["id"]
+            for cmd in catalog:
+                if cmd.get("id") == existing_id:
+                    return cmd
+
+    # 3. Get recent command IDs from history (last 30 entries)
     recent_ids = {entry.get("id") for entry in history[-30:] if isinstance(entry, dict) and "id" in entry}
 
     # 3. Filter eligible commands not in recent history
