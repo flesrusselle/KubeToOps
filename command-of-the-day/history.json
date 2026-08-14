@@ -3,5 +3,10 @@
     "id": "cmd-008",
     "date": "2026-08-09",
     "title": "Retrieve Previous Container Logs Before Crash"
+  },
+  {
+    "id": "cmd-003",
+    "date": "2026-08-14",
+    "title": "Sort Cluster Events by Last Timestamp"
   }
 ]
