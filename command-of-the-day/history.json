@@ -3,5 +3,10 @@
     "id": "cmd-008",
     "date": "2026-08-09",
     "title": "Retrieve Previous Container Logs Before Crash"
+  },
+  {
+    "id": "cmd-007",
+    "date": "2026-08-22",
+    "title": "Roll Back Deployment to Previous Revision"
   }
 ]
