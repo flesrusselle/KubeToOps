@@ -8,5 +8,10 @@
     "id": "cmd-002",
     "date": "2026-08-10",
     "title": "List Pods Across All Cluster Namespaces"
+  },
+  {
+    "id": "cmd-001",
+    "date": "2026-08-24",
+    "title": "Watch Pod Status Changes in Real Time"
   }
 ]
