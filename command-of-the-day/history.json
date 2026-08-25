@@ -8,5 +8,10 @@
     "id": "cmd-002",
     "date": "2026-08-10",
     "title": "List Pods Across All Cluster Namespaces"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-08-25",
+    "title": "Generate Clean Manifest via Client Dry-Run"
   }
 ]
