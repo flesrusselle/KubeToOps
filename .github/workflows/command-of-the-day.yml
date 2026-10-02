@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
           cache: 'pip'
@@ -60,9 +60,10 @@ jobs:
 
       - name: Create Pull Request
         if: steps.git_check.outputs.has_changes == 'true'
-        uses: peter-evans/create-pull-request@v5
+        id: create_pr
+        uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "docs: update Kubernetes Command of the Day (${{ github.event.repository.updated_at }})"
           title: "docs: update Kubernetes Command of the Day"
           body: |
@@ -76,3 +77,26 @@ jobs:
           branch: "automation/command-of-the-day-${{ github.run_id }}"
           base: main
           delete-branch: true
+
+      - name: Verify and Merge Pull Request
+        if: steps.create_pr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ steps.create_pr.outputs.pull-request-number }}"
+          mapfile -t CHANGED_FILES < <(gh pr diff "$PR_NUMBER" --name-only)
+
+          if [ "${#CHANGED_FILES[@]}" -eq 0 ]; then
+            echo "No changed files found; merge blocked."
+            exit 1
+          fi
+
+          for FILE in "${CHANGED_FILES[@]}"; do
+            if [ "$FILE" != "command-of-the-day/README.md" ] && [ "$FILE" != "command-of-the-day/history.json" ]; then
+              echo "Unexpected file in generated-content pull request: $FILE"
+              exit 1
+            fi
+          done
+
+          gh pr merge "$PR_NUMBER" --squash --delete-branch
+          echo "Merged generated-content pull request #${PR_NUMBER}."

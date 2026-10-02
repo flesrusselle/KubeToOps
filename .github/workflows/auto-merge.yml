@@ -2,57 +2,97 @@ name: Controlled Auto-Merge
 
 on:
   pull_request_target:
-    types: [opened, synchronized, labeled]
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
+  workflow_run:
+    workflows:
+      - PR Validation & Summary
+      - Security & Secret Scanning
+      - Documentation Link Check
+    types: [completed]
 
 permissions:
   contents: write
   pull-requests: write
+  checks: read
 
 jobs:
-  auto-merge-cotd:
-    name: Auto-Merge CotD PRs
+  auto-merge:
+    name: Auto-Merge Automated PRs
+    if: >-
+      github.event_name == 'pull_request_target' ||
+      github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
-    # Only run for the bot's own CotD automation PRs
-    if: |
-      github.actor == 'github-actions[bot]' &&
-      startsWith(github.head_ref, 'automation/command-of-the-day-')
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Verify Only Safe Files Changed
-        id: file_check
+      - name: Validate and Merge Eligible Pull Request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          PR_FILES=$(gh pr diff "$PR_NUMBER" --name-only)
-          SAFE=true
-          echo "Files changed in PR #${PR_NUMBER}:"
-          echo "$PR_FILES"
+          PR_NUMBER=$(jq -r '.pull_request.number // .workflow_run.pull_requests[0].number // empty' "$GITHUB_EVENT_PATH")
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No pull request is associated with this event."
+            exit 0
+          fi
 
-          for f in $PR_FILES; do
-            if [[ "$f" != "command-of-the-day/README.md" && "$f" != "command-of-the-day/history.json" ]]; then
-              echo "::error::UNSAFE FILE DETECTED IN COTD PR: $f"
-              SAFE=false
+          PR_DATA=$(gh pr view "$PR_NUMBER" --repo "$REPOSITORY" \
+            --json author,headRefName,headRepositoryOwner,isDraft,state)
+          PR_STATE=$(jq -r '.state' <<<"$PR_DATA")
+          IS_DRAFT=$(jq -r '.isDraft' <<<"$PR_DATA")
+          AUTHOR=$(jq -r '.author.login' <<<"$PR_DATA")
+          HEAD_BRANCH=$(jq -r '.headRefName' <<<"$PR_DATA")
+          HEAD_OWNER=$(jq -r '.headRepositoryOwner.login' <<<"$PR_DATA")
+
+          if [ "$PR_STATE" != "OPEN" ] || [ "$IS_DRAFT" = "true" ] || [ "$HEAD_OWNER" != "$REPOSITORY_OWNER" ]; then
+            echo "Pull request is not an eligible open branch from this repository."
+            exit 0
+          fi
+
+          if [[ "$HEAD_BRANCH" == automation/command-of-the-day-* ]]; then
+            PR_TYPE="cotd"
+          elif [ "$AUTHOR" = "app/dependabot" ] || [ "$AUTHOR" = "dependabot" ]; then
+            PR_TYPE="dependabot"
+          else
+            echo "Pull request is not from an approved automation."
+            exit 0
+          fi
+
+          mapfile -t CHANGED_FILES < <(gh pr diff "$PR_NUMBER" --repo "$REPOSITORY" --name-only)
+          if [ "${#CHANGED_FILES[@]}" -eq 0 ]; then
+            echo "No changed files found; merge blocked."
+            exit 1
+          fi
+
+          for FILE in "${CHANGED_FILES[@]}"; do
+            if [ "$PR_TYPE" = "cotd" ]; then
+              if [ "$FILE" != "command-of-the-day/README.md" ] && [ "$FILE" != "command-of-the-day/history.json" ]; then
+                echo "Unexpected file in generated-content pull request: $FILE"
+                exit 1
+              fi
+            elif [[ "$FILE" != .github/workflows/* && "$FILE" != "requirements.txt" && "$FILE" != "requirements-dev.txt" ]]; then
+              echo "Unexpected file in dependency pull request: $FILE"
+              exit 1
             fi
           done
 
-          if [ "$SAFE" = "true" ]; then
-            echo "All changed files are safe generated content."
-          else
-            echo "::error::Unsafe files detected — auto-merge blocked."
+          CHECKS=$(gh pr checks "$PR_NUMBER" --repo "$REPOSITORY" \
+            --json name,state --jq '[.[] | select(.name != "Auto-Merge Automated PRs")]')
+          if jq -e 'any(.state == "FAILURE" or .state == "CANCELLED" or .state == "TIMED_OUT" or .state == "ACTION_REQUIRED")' <<<"$CHECKS" >/dev/null; then
+            echo "A pull request check failed; merge blocked."
+            exit 1
           fi
-          echo "safe_files=$SAFE" >> $GITHUB_OUTPUT
+          if jq -e 'any(.state == "PENDING" or .state == "QUEUED" or .state == "IN_PROGRESS")' <<<"$CHECKS" >/dev/null; then
+            echo "Pull request checks are still running; a completion event will retry the merge."
+            exit 0
+          fi
 
-      - name: Enable Auto-Merge
-        if: steps.file_check.outputs.safe_files == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          gh pr merge "$PR_NUMBER" --auto --squash
-          echo "Auto-merge enabled for safe CotD PR #${PR_NUMBER}"
+          VALIDATION=$(jq -r '[.[] | select(.name == "Validate PR & Update Summary")][0].state // "MISSING"' <<<"$CHECKS")
+          SECURITY=$(jq -r '[.[] | select(.name == "Gitleaks Secret Scan")][0].state // "MISSING"' <<<"$CHECKS")
+          if [ "$VALIDATION" != "SUCCESS" ] || [ "$SECURITY" != "SUCCESS" ]; then
+            echo "Required validation checks have not completed successfully."
+            exit 0
+          fi
+
+          gh pr merge "$PR_NUMBER" --repo "$REPOSITORY" --squash --delete-branch
+          echo "Merged eligible automated pull request #${PR_NUMBER}."
