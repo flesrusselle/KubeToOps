@@ -8,5 +8,150 @@
     "id": "cmd-002",
     "date": "2026-08-10",
     "title": "List Pods Across All Cluster Namespaces"
+  },
+  {
+    "id": "cmd-009",
+    "date": "2026-08-11",
+    "title": "Inspect Pod and Node Resource Utilization"
+  },
+  {
+    "id": "cmd-010",
+    "date": "2026-08-12",
+    "title": "Forward Local Port to Kubernetes Service"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-08-13",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
+  },
+  {
+    "id": "cmd-003",
+    "date": "2026-08-14",
+    "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-08-15",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-08-16",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-08-17",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-08-18",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-08-19",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-08-20",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-08-21",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-007",
+    "date": "2026-08-22",
+    "title": "Roll Back Deployment to Previous Revision"
+  },
+  {
+    "id": "cmd-001",
+    "date": "2026-08-23",
+    "title": "Watch Pod Status Changes in Real Time"
+  },
+  {
+    "id": "cmd-001",
+    "date": "2026-08-24",
+    "title": "Watch Pod Status Changes in Real Time"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-08-25",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-08-26",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-08-27",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-003",
+    "date": "2026-08-28",
+    "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-003",
+    "date": "2026-08-29",
+    "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-009",
+    "date": "2026-08-30",
+    "title": "Inspect Pod and Node Resource Utilization"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-08-31",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-09-01",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-09-02",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-09-03",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-09-04",
+    "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-09-05",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-09-06",
+    "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-010",
+    "date": "2026-09-07",
+    "title": "Forward Local Port to Kubernetes Service"
+  },
+  {
+    "id": "cmd-005",
+    "date": "2026-09-08",
+    "title": "Generate Clean Manifest via Client Dry-Run"
   }
 ]
