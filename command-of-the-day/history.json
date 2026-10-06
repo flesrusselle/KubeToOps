@@ -173,5 +173,10 @@
     "id": "cmd-005",
     "date": "2026-10-05",
     "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-009",
+    "date": "2026-10-06",
+    "title": "Inspect Pod and Node Resource Utilization"
   }
 ]
