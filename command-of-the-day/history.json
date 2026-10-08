@@ -183,5 +183,10 @@
     "id": "cmd-008",
     "date": "2026-10-07",
     "title": "Retrieve Previous Container Logs Before Crash"
+  },
+  {
+    "id": "cmd-002",
+    "date": "2026-10-08",
+    "title": "List Pods Across All Cluster Namespaces"
   }
 ]
