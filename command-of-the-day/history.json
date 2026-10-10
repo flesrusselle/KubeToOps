@@ -193,5 +193,10 @@
     "id": "cmd-003",
     "date": "2026-10-09",
     "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-009",
+    "date": "2026-10-10",
+    "title": "Inspect Pod and Node Resource Utilization"
   }
 ]
