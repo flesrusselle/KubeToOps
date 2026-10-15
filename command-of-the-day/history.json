@@ -218,5 +218,10 @@
     "id": "cmd-005",
     "date": "2026-10-14",
     "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-007",
+    "date": "2026-10-15",
+    "title": "Roll Back Deployment to Previous Revision"
   }
 ]
