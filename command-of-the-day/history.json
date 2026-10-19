@@ -238,5 +238,10 @@
     "id": "cmd-003",
     "date": "2026-10-18",
     "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-10-19",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
   }
 ]
