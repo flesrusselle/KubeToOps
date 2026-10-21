@@ -248,5 +248,10 @@
     "id": "cmd-004",
     "date": "2026-10-20",
     "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-003",
+    "date": "2026-10-21",
+    "title": "Sort Cluster Events by Last Timestamp"
   }
 ]
