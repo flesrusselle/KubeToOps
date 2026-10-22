@@ -253,5 +253,10 @@
     "id": "cmd-003",
     "date": "2026-10-21",
     "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-007",
+    "date": "2026-10-22",
+    "title": "Roll Back Deployment to Previous Revision"
   }
 ]
