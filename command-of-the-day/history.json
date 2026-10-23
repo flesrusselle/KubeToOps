@@ -258,5 +258,10 @@
     "id": "cmd-007",
     "date": "2026-10-22",
     "title": "Roll Back Deployment to Previous Revision"
+  },
+  {
+    "id": "cmd-009",
+    "date": "2026-10-23",
+    "title": "Inspect Pod and Node Resource Utilization"
   }
 ]
