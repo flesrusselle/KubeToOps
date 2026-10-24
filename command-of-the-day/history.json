@@ -263,5 +263,10 @@
     "id": "cmd-009",
     "date": "2026-10-23",
     "title": "Inspect Pod and Node Resource Utilization"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-10-24",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
   }
 ]
