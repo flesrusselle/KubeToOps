@@ -278,5 +278,10 @@
     "id": "cmd-005",
     "date": "2026-10-26",
     "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-010",
+    "date": "2026-10-27",
+    "title": "Forward Local Port to Kubernetes Service"
   }
 ]
