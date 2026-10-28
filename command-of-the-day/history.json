@@ -283,5 +283,10 @@
     "id": "cmd-010",
     "date": "2026-10-27",
     "title": "Forward Local Port to Kubernetes Service"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-10-28",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
   }
 ]
