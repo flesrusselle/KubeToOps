@@ -308,5 +308,10 @@
     "id": "cmd-001",
     "date": "2026-11-01",
     "title": "Watch Pod Status Changes in Real Time"
+  },
+  {
+    "id": "cmd-007",
+    "date": "2026-11-02",
+    "title": "Roll Back Deployment to Previous Revision"
   }
 ]
