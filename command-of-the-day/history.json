@@ -313,5 +313,10 @@
     "id": "cmd-007",
     "date": "2026-11-02",
     "title": "Roll Back Deployment to Previous Revision"
+  },
+  {
+    "id": "cmd-010",
+    "date": "2026-11-03",
+    "title": "Forward Local Port to Kubernetes Service"
   }
 ]
