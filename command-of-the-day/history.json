@@ -318,5 +318,10 @@
     "id": "cmd-010",
     "date": "2026-11-03",
     "title": "Forward Local Port to Kubernetes Service"
+  },
+  {
+    "id": "cmd-010",
+    "date": "2026-11-04",
+    "title": "Forward Local Port to Kubernetes Service"
   }
 ]
