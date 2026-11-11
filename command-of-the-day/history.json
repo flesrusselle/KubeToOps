@@ -353,5 +353,10 @@
     "id": "cmd-008",
     "date": "2026-11-10",
     "title": "Retrieve Previous Container Logs Before Crash"
+  },
+  {
+    "id": "cmd-009",
+    "date": "2026-11-11",
+    "title": "Inspect Pod and Node Resource Utilization"
   }
 ]
