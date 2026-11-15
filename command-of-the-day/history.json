@@ -373,5 +373,10 @@
     "id": "cmd-005",
     "date": "2026-11-14",
     "title": "Generate Clean Manifest via Client Dry-Run"
+  },
+  {
+    "id": "cmd-004",
+    "date": "2026-11-15",
+    "title": "Explore API Resource Schema Fields"
   }
 ]
