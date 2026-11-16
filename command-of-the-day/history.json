@@ -378,5 +378,10 @@
     "id": "cmd-004",
     "date": "2026-11-15",
     "title": "Explore API Resource Schema Fields"
+  },
+  {
+    "id": "cmd-006",
+    "date": "2026-11-16",
+    "title": "Trigger Graceful Rolling Restart of Deployment"
   }
 ]
