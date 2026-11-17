@@ -383,5 +383,10 @@
     "id": "cmd-006",
     "date": "2026-11-16",
     "title": "Trigger Graceful Rolling Restart of Deployment"
+  },
+  {
+    "id": "cmd-001",
+    "date": "2026-11-17",
+    "title": "Watch Pod Status Changes in Real Time"
   }
 ]
