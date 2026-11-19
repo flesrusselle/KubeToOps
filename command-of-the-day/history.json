@@ -393,5 +393,10 @@
     "id": "cmd-003",
     "date": "2026-11-18",
     "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-010",
+    "date": "2026-11-19",
+    "title": "Forward Local Port to Kubernetes Service"
   }
 ]
