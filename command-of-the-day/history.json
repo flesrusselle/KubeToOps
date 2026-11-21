@@ -403,5 +403,10 @@
     "id": "cmd-003",
     "date": "2026-11-20",
     "title": "Sort Cluster Events by Last Timestamp"
+  },
+  {
+    "id": "cmd-002",
+    "date": "2026-11-21",
+    "title": "List Pods Across All Cluster Namespaces"
   }
 ]
